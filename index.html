@@ -1,134 +1,307 @@
+<!-- 
+
+Title : Text Reverser
+Function : This HTML document takes in text from the user and reverses it while they type using an event listener.
+---
+Future Additions : Implement functionality to mirror multiple lines of code.  Currently, if the user reaches the second line in the text area,
+the text will no longer look mirrored.  I could fix this problem by appending each line of text to an array.  If the user empties one array (backspace), they navigate to the previous index.
+
+ -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Text Reverser</title>
+    <div id="standard-head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Text Reverser</title>
+        <link href="https://fonts.googleapis.com/css?family=Muli|Poiret+One&display=swap" rel="stylesheet">
+    </div>
+    <!-- #standard-head : No functionality, just used to collapse the standard tags within a head, not including the style-->
 
-    <style>
+    <style id="myCSS">
+        /* Font styling for nearly all tags */
+        :root {
+            font-family: 'Muli', sans-serif;
+        }
+
+        /* ---- */
+        /* TAGS */
+        /* ---- */
+
+        /* <HTML>
+        *   Set height and width to 100% for scaling child tags.
+        *   Set up the HTML as flexbox element with horizontal centering.
+        *   Set background color for page.
+         */
         html {
             height: 100%;
             width: 100%;
-        }
-
-        h1{
-            font-size: 70px;
-            height : 0px;
-            margin : 30px 0px 0px 0px;
-        }
-        p{
-            height : 0px;
-        }
-
-        body {
-            width: 95%;
-            height: 95%;
-            border: 1px solid #c3c3c3;
             display: -webkit-flex;
             display: flex;
             -webkit-flex-wrap: wrap;
             flex-wrap: wrap;
             -webkit-justify-content: center;
             justify-content: center;
+            background-color: #fffaf0;
         }
 
+        /* <Body>
+        *   Set height and width
+        */
+        body {
+            height: 90%;
+            width: 90%;
+        }
+
+        /* <header>
+        *   set the font styling for any <header> tag.
+         */
+        header {
+            font-family: 'Poiret One', cursive;
+            font-size: 50px;
+            text-align: center;
+            color: #5183a6;
+        }
+
+        /* <summary>
+        *   set the alignment, margin, and font styling for any <summary> tag.
+         */
+        summary {
+            text-align: center;
+            margin: 0px 0px 25px 0px;
+            font-size: 16px;
+            color: #37567d;
+        }
+
+        /* <textarea>
+        *   set the font styling and border styling for any <textarea> tag.
+        *   Remove 'resize' feature from any textarea tag.
+         */
+        textarea {
+            font-family: 'Muli', sans-serif;
+            background-color: #deccba;
+            font-size: 16px;
+            color: #5e422a;
+            resize: none;
+            border: 1px solid #5e422a;
+        }
+        textarea:focus{
+            outline: none;
+        }
+
+        /* ---- */
+        /* ID's */
+        /* ---- */
+
+        /* #reverse-output
+        *   set alignment to the right so that the output mirrors the input.
+        *   Remove right border to avoid overlapping borders.
+         */
         #reverse-output {
             text-align: right;
             white-space: normal;
+            border-right: none;
+            color: #37567d;
         }
 
-        container {
-            width: 1000px;
-            height: 300px;
-            border: 1px solid #c3c3c3;
-            display: -webkit-flex;
-            display: flex;
-            -webkit-flex-wrap: wrap;
-            flex-wrap: wrap;
-            -webkit-justify-content: center;
-            justify-content: center;
+        /* #reverse-input
+        *   set left border to stylize the divider between the two textareas.
+         */
+        #reverse-input {
+            border-left: 1px dotted #37567d;
         }
 
+        /* ------- */
+        /* classes */
+        /* ------- */
+
+        /* .col
+        *   A class attached to almost all <div> tags.
+        *   Creates a flex box with a width of 100%, allowing the container to fill the entire width of our HTML document.
+        *   Justifies(horizontal) content to the center.
+         */
         .col {
             width: 100%;
             display: -webkit-flex;
-            background-color: tomato;
             display: flex;
             -webkit-justify-content: center;
             justify-content: center;
         }
 
-        .col-half {
-            width: 45%;
+        /* .col-fifth
+        *   Similar to the .col class, but only fills 1/5 of the page.
+        *   Creates a flex box with a width of 20%, allowing the container to fill 20% of our HTML document.
+        *   Justifies(horizontal) content to the right.
+         */
+        .col-fifth {
+            width: 20%;
+            height: 150px;
             display: -webkit-flex;
             display: flex;
             -webkit-justify-content: right;
             justify-content: right;
-            align-items:flex-start;
         }
-    </style>
+
+        /* @media => max-width : 600px
+        *   On any screen smaller than 600px, set the width of .col-fifth to 45%.  This is for readablity on smaller devices.
+        *   Also lower the font size of <header> for the same reason.
+         */
+        @media screen and (max-width: 600px) {
+            .col-fifth {
+                width: 45%;
+            }
+
+            header {
+                font-size: 30px;
+            }
+        }
+    </style> <!-- #myCSS : No functionality, just used to specify that this is my CSS (no better name for it)-->
 
 </head>
 
 <body>
 
-    <div id="header" class="col">
+    <header class="col">
 
         <h1> Reverser </h1>
+        <!-- <h1> : no additonal styling -->
 
-    </div>
-    <p class="col"> Type anything into the box below</p>
+    </header>
+    <!-- <header> : The header of our page.  Styling in #myCSS >> .col attached to stretch the header for the entire width of the HTML document-->
 
-    <textarea id="reverse-output" class="col-half" wrap="soft" rows="1" cols="15"
-        placeholder="woleb xob eht otni gnihtyna epyT"></textarea>
+    <summary class="col">
 
-    <textarea id="reverse-input" class="col-half" rows="1" wrap="soft" cols="15"
-        placeholder="Type anything into the box below"></textarea>
+        <h3> Type anything in the text box on the right hand side</h3>
+
+    </summary>
+    <!-- <summary> : The description of this page's functionality. Styling in #myCSS >> .col for same reason as <header>-->
+
+    <main class="col">
+
+        <textarea id="reverse-output" class="col-fifth" wrap="soft"
+            placeholder="woleb xob eht otni gnihtyna epyT"></textarea>
+        <!--
+        <textarea>:
+        #reverse-ouput : this will output the reversed text of '#reverse-input'
+        style in #myCSS
+        .col-fifth to set a width of 1/5 the HTML page
+        placeholder to show functionality
+        -->
+
+        <textarea id="reverse-input" class="col-fifth" wrap="soft"
+            placeholder="Type anything into the box below"></textarea>
+        <!--
+        <textarea>:
+        #reverse-input : this will store the user's input text, and send text to '#reverse-output'
+        style in #myCSS
+        -->
+
+    </main><!-- <main> The main content of our page: the input and ouput box >> .col for same reason as <header>-->
+
 
 
 </body>
 
-<script>
+<script id="js-text-reverser">
 
-    var $text = document.getElementById("reverse-input");
-    var $reverse = document.getElementById("reverse-output");
+    /*
+    *   Takes in text from "#reverse-input", reverses the text, and ouputs it to "#reverse-output".
+    */
 
-    var text = "";
-    var textArray = [];
+    //---------HTML DOM REFERENCE----------//
+    //-------------------------------------//
 
-    function delayRead() {
-        var myInterval = setInterval(function () {
+    const $text = document.getElementById("reverse-input");               //Set reference to the HTML element with the ID 'reverse-input'
 
-            text = $text.value;
+    const $reverse = document.getElementById("reverse-output");           //Set reference to the HTML element with the ID 'reverse-ouput'
 
-            text = text.split("");
-            console.log(text);
-            text = text.reverse();
-            console.log(text);
-            text = text.join("");
 
-            $reverse.value = text;
+    //----------FUNCTIONS----------//
+    //-----------------------------//
 
-            clearInterval(myInterval);
+    /**
+     * Delays the read of '$text' to allow for it to be updated by the user's input.  Otherwise, we would be missing the latest character entered by the user.
+    */
+    function CallDelayRead() {
 
-            return text;
+        console.log("- CallDelayRead() : Beginning Read -");
 
-        }, 50)
+        //Below; sets an interval with a timer of 50ms.  After 50ms...
+        var delayRead = setInterval(function () {
+
+            reverseText($text.value);
+
+            clearInterval(delayRead);                       //Clear the interval so that it does not continue to run.
+
+        }, 50 /*wait 50 ms: small enough to feel instantaneous */)
+        
+        console.log("- CallDelayRead() : Finished Read -");
     }
 
-    console.log($text);
+    /**
+     *  Reverses the text of the parameter and returns it as a string.
+     *  @param {string} pText - Text to be reversed
+     *  @return {string} The parameter text reversed
+     *  
+     *  @example
+     *
+     *      reverseText('hello')
+     */
+    function reverseText(pText) {
 
-    $text.addEventListener("keydown", function (event) {
+        console.log("-- reverseText(" + pText + ") : Reversing the text of " + pText + " --");
+
+        /*Variables*/
+        let iTextArray = [];
+
+        /*functionality*/
+
+        pText = $text.value;                //Set our text, pText, to the value of the HTML element, $text.
+
+        iTextArray = pText.split("");            //Convert our string to an array, iTextArray, with no spacing.
+
+        iTextArray = iTextArray.reverse();            //Use the array method 'reverse' to reverse the order of the array, iTextArray.
+
+        pText = iTextArray.join("");                    //Convert our new array into a string and set it to our text, pText.
+
+        $reverse.value = pText;                         //Set the value of our HTML element, $reverse, to the newly modified text.
+
+        /*return*/
         
-        console.log("inputing: " + event.keyCode);
+        console.log("-- reverseText(" + pText + ") : Reversed the text to " + pText + " --");
+        console.log("--- finished ---");
 
-        delayRead();
+        return pText;       //Returns the parameter reversed.
+    }
 
+    //----------EVENT LISTENERS----------//
+    //-----------------------------------//
+
+    /**
+     * Adds an event listener to our HTML element, $text, for any key pressed down.
+     */
+    $text.addEventListener("keydown", function (event) {
+
+        console.log("User keydown, ", event.key + " , on ", event.target, " and running 'CallDelayRead()'.");
+
+        CallDelayRead();            //If there is input in our textbox, then the user has likely modified their input.  So, we begin reading it.
+
+    })
+
+    /**
+     * Adds an event listener to our HTML element, $reverse, for any key pressed down.
+     */
+    $reverse.addEventListener("keydown", function (event) {
+        console.log("User keydown, " + event.key + " , on ", event.target, " and prevented default functionality.");
+        event.preventDefault();             //Prevents the default functionality of our event (in this case, modifying text in the <textarea>)
     })
 
 
 </script>
+<!--#js-text-reverser : no functionality, just specifies the use of this script-->
 
 </html>
