@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Text Reverser</title>
+
+    <style>
+        html {
+            height: 100%;
+            width: 100%;
+        }
+
+        h1{
+            font-size: 70px;
+            height : 0px;
+            margin : 30px 0px 0px 0px;
+        }
+        p{
+            height : 0px;
+        }
+
+        body {
+            width: 95%;
+            height: 95%;
+            border: 1px solid #c3c3c3;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        #reverse-output {
+            text-align: right;
+            white-space: normal;
+        }
+
+        container {
+            width: 1000px;
+            height: 300px;
+            border: 1px solid #c3c3c3;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .col {
+            width: 100%;
+            display: -webkit-flex;
+            background-color: tomato;
+            display: flex;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .col-half {
+            width: 45%;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-justify-content: right;
+            justify-content: right;
+            align-items:flex-start;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="header" class="col">
+
+        <h1> Reverser </h1>
+
+    </div>
+    <p class="col"> Type anything into the box below</p>
+
+    <textarea id="reverse-output" class="col-half" wrap="soft" rows="1" cols="15"
+        placeholder="woleb xob eht otni gnihtyna epyT"></textarea>
+
+    <textarea id="reverse-input" class="col-half" rows="1" wrap="soft" cols="15"
+        placeholder="Type anything into the box below"></textarea>
+
+
+</body>
+
+<script>
+
+    var $text = document.getElementById("reverse-input");
+    var $reverse = document.getElementById("reverse-output");
+
+    var text = "";
+    var textArray = [];
+
+    function delayRead() {
+        var myInterval = setInterval(function () {
+
+            text = $text.value;
+
+            text = text.split("");
+            console.log(text);
+            text = text.reverse();
+            console.log(text);
+            text = text.join("");
+
+            $reverse.value = text;
+
+            clearInterval(myInterval);
+
+            return text;
+
+        }, 50)
+    }
+
+    console.log($text);
+
+    $text.addEventListener("keydown", function (event) {
+        
+        console.log("inputing: " + event.keyCode);
+
+        delayRead();
+
+    })
+
+
+</script>
+
+</html>
