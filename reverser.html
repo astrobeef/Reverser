@@ -13,14 +13,11 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
 <html lang="en">
 
 <head>
-    <div id="standard-head">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Text Reverser</title>
-        <link href="https://fonts.googleapis.com/css?family=Muli|Poiret+One&display=swap" rel="stylesheet">
-    </div>
-    <!-- #standard-head : No functionality, just used to collapse the standard tags within a head, not including the style-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Text Reverser</title>
+    <link href="https://fonts.googleapis.com/css?family=Muli|Poiret+One&display=swap" rel="stylesheet">
 
     <style id="myCSS">
         /* Font styling for nearly all tags */
@@ -62,7 +59,7 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
          */
         header {
             font-family: 'Poiret One', cursive;
-            font-size: 50px;
+            font-size: 46px;
             text-align: center;
             color: #5183a6;
         }
@@ -72,7 +69,7 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
          */
         summary {
             text-align: center;
-            margin: 0px 0px 25px 0px;
+            margin: 0px 0px 20px 0px;
             font-size: 16px;
             color: #37567d;
         }
@@ -84,12 +81,13 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
         textarea {
             font-family: 'Muli', sans-serif;
             background-color: #deccba;
-            font-size: 16px;
+            font-size: 14px;
             color: #5e422a;
             resize: none;
             border: 1px solid #5e422a;
         }
-        textarea:focus{
+
+        textarea:focus {
             outline: none;
         }
 
@@ -113,6 +111,14 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
          */
         #reverse-input {
             border-left: 1px dotted #37567d;
+        }
+
+        #reset-button {
+            margin: 0px 0px 10px 0px;
+        }
+
+        #reverse-output:hover{
+            cursor: default;
         }
 
         /* ------- */
@@ -146,6 +152,11 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
             justify-content: right;
         }
 
+        .hide {
+            opacity: 0;
+            color: #f57842;
+        }
+
         /* @media => max-width : 600px
         *   On any screen smaller than 600px, set the width of .col-fifth to 45%.  This is for readablity on smaller devices.
         *   Also lower the font size of <header> for the same reason.
@@ -175,14 +186,40 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
 
     <summary class="col">
 
-        <h3> Type anything in the text box on the right hand side</h3>
+        <div class="col">
+
+            <h3> Type anything in the text box on the right hand side</h3><br>
+        </div>
 
     </summary>
     <!-- <summary> : The description of this page's functionality. Styling in #myCSS >> .col for same reason as <header>-->
 
+    <div class="col">
+
+
+        <p> Letter count limit of 150 (<span id="letter-count">0</span>)</p>
+
+    </div>
+
+    <div>
+
+        <div id="limit-reached" class="col hide">
+
+            <p>You have reached the character limit</p><br>
+
+        </div>
+
+        <div id="reset-button" class="col">
+
+            <button>Reset text area</button>
+
+        </div>
+
+    </div>
+
     <main class="col">
 
-        <textarea id="reverse-output" class="col-fifth" wrap="soft"
+        <textarea id="reverse-output" readonly="readonly" class="col-fifth" wrap="soft"
             placeholder="woleb xob eht otni gnihtyna epyT"></textarea>
         <!--
         <textarea>:
@@ -202,8 +239,6 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
 
     </main><!-- <main> The main content of our page: the input and ouput box >> .col for same reason as <header>-->
 
-
-
 </body>
 
 <script id="js-text-reverser">
@@ -218,6 +253,12 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
     const $text = document.getElementById("reverse-input");               //Set reference to the HTML element with the ID 'reverse-input'
 
     const $reverse = document.getElementById("reverse-output");           //Set reference to the HTML element with the ID 'reverse-ouput'
+
+    const $count = document.getElementById("letter-count");               //Set reference to the HTML element with the ID 'letter-count'
+
+    const $reset = document.getElementById("reset-button");               //Set reference to the HTML element with the ID 'reset-button'
+
+    const $limit = document.getElementById("limit-reached");              //Set reference to the HTML element with the ID 'limit-reached'
 
 
     //----------FUNCTIONS----------//
@@ -238,7 +279,7 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
             clearInterval(delayRead);                       //Clear the interval so that it does not continue to run.
 
         }, 50 /*wait 50 ms: small enough to feel instantaneous */)
-        
+
         console.log("- CallDelayRead() : Finished Read -");
     }
 
@@ -264,6 +305,8 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
 
         iTextArray = pText.split("");            //Convert our string to an array, iTextArray, with no spacing.
 
+        $count.textContent = pText.length;          //Set our letter count to the length of text.
+
         iTextArray = iTextArray.reverse();            //Use the array method 'reverse' to reverse the order of the array, iTextArray.
 
         pText = iTextArray.join("");                    //Convert our new array into a string and set it to our text, pText.
@@ -271,7 +314,7 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
         $reverse.value = pText;                         //Set the value of our HTML element, $reverse, to the newly modified text.
 
         /*return*/
-        
+
         console.log("-- reverseText(" + pText + ") : Reversed the text to " + pText + " --");
         console.log("--- finished ---");
 
@@ -286,9 +329,27 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
      */
     $text.addEventListener("keydown", function (event) {
 
-        console.log("User keydown, ", event.key + " , on ", event.target, " and running 'CallDelayRead()'.");
+        //IF the text has a character count greater than 200, then do nothing.  This is to avoid overflow.
+        if ($text.value.split("").length >= 150) {
 
-        CallDelayRead();            //If there is input in our textbox, then the user has likely modified their input.  So, we begin reading it.
+            $limit.style.opacity = 1;
+
+            let newText = $text.value.split("");
+            newText.splice(150);
+            newText = newText.join("");
+            $text.value = newText;
+            return null;
+        }
+        else {
+
+            $limit.style.opacity = 0;
+
+            console.log("User keydown, ", event.key + " , on ", event.target, " and running 'CallDelayRead()'.");
+
+            CallDelayRead();            //If there is input in our textbox, then the user has likely modified their input.  So, we begin reading it.
+
+        }
+
 
     })
 
@@ -298,6 +359,15 @@ the text will no longer look mirrored.  I could fix this problem by appending ea
     $reverse.addEventListener("keydown", function (event) {
         console.log("User keydown, " + event.key + " , on ", event.target, " and prevented default functionality.");
         event.preventDefault();             //Prevents the default functionality of our event (in this case, modifying text in the <textarea>)
+    })
+
+    $reset.addEventListener("click", function (event) {
+
+        let blankText = "";
+
+        $text.value = blankText;
+        $reverse.value = blankText;
+        $count.textContent = 0;
     })
 
 
